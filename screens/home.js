@@ -5,12 +5,12 @@ import { globalStyles } from "../styles/global";
 export default function Home({ navigation }) {
     const pressHandler = () => {
         navigation.navigate('Login');
-    }
+    };
 
     return (
         <View style={globalStyles.container}>
             <Text>Home screen</Text>
-            <Button title='Sign In' onPress={pressHandler} />
+            <Button title='Authorisation' onPress={pressHandler} />
         </View>
-    )
+    );
 }
