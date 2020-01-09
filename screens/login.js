@@ -10,9 +10,13 @@ export default function Login() {
                 Authorization: 'Basic Token'
             }
         })
+            .then((response) => response.json())
             .then((responseJson) => {
-                return console.log(responseJson.json('token'))
+                console.log(responseJson.token);
             })
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     return (

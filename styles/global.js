@@ -14,6 +14,7 @@ export const globalStyles = StyleSheet.create({
         borderColor: 'grey',
         height: 40,
         marginBottom: 10,
+        padding: 8,
     },
     loginButton: {
         
