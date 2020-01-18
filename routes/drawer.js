@@ -1,14 +1,14 @@
 import { createDrawerNavigator } from "react-navigation-drawer";
 import { createAppContainer } from "react-navigation";
-import Home from "../screens/home";
-import Login from "../screens/login";
+import HomeStack from "./homeStack"
+import LoginStack from "./loginStack";
 
 const RootDrawerNavigator = createDrawerNavigator({
     Home: {
-        screen: Home,
+        screen: HomeStack,
     },
     Login: {
-        screen: Login,
+        screen: LoginStack,
     },
 });
 

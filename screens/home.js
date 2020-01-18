@@ -9,22 +9,34 @@ export default function Home({ navigation }) {
         navigation.navigate('Login');
     };
 
-    const auth = 'Bearer ' + AsyncStorage.getItem('userToken')
-    fetch('https://spendcontrol.herokuapp.com/api/users/current', {
-        method: 'GET',
-        headers: {
-            Autorization: auth
-        }
-    })
-        .then((response) => response.json())
-        .then((responseJson) => {
+    getUsername = async () => {
+        try {
+            let token = await AsyncStorage.getItem('userToken')
+            let auth = 'Bearer ' + token
+            console.log(auth)
+
+            let response = await fetch('https://spendcontrol.herokuapp.com/api/users/current', {
+                method: 'GET',
+                headers: {
+                    Authorization: auth,
+                }
+            })
+            let responseJson = await response.json()
+            console.log(responseJson)
             if (responseJson.username) {
                 setUsername(responseJson.username)
             } else {
                 navigation.navigate('Login')
             }
-        })
+            console.log('end try')
+        }
+        catch {
+            navigation.navigate('Login')
+        }
+    }
 
+    getUsername()
+    
     return (
         <View style={globalStyles.container} o>   
             <Text>Hello, { username }</Text>

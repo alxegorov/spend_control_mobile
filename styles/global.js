@@ -4,7 +4,6 @@ export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        paddingTop: 40,
     },
     input: {
         borderWidth: 1,
@@ -16,18 +15,11 @@ export const globalStyles = StyleSheet.create({
     inputForm: {
         marginTop: 10
     },
-    loginForm: {
-        flex: 1,
-        padding: 40,
-    },
     loginInput: {
         borderWidth: 1,
         borderColor: 'grey',
         height: 40,
         marginBottom: 10,
         padding: 8,
-    },
-    loginButton: {
-        
     },
 });

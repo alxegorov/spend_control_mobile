@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import { View, ScrollView, TextInput, Button, AsyncStorage, Alert } from "react-native";
+import { View, ScrollView, TextInput, Button, Alert, AsyncStorage } from "react-native";
 import { globalStyles } from "../styles/global";
 import base64 from 'react-native-base64';
 
-export default function Login({ navigation }) {
-    const signIn = (token) => {
-        AsyncStorage.setItem('userToken', token)
-        navigation.push('Home')
-    };
 
-    const [login, setLogin] = useState('');
-    const [password, setPassword] = useState('');
-    const clickHandler = () => {
+
+export default function Login({ navigation }) {
+    const [login, setLogin] = useState('')
+    const [password, setPassword] = useState('')
+    const [token, setToken] = useState('')
+
+    const signIn = () => {
+        getToken()
+        AsyncStorage.setItem('userToken', token);
+        navigation.push('Home')
+    }
+     
+    const getToken = () => {
         const auth = 'Basic ' + base64.encode(login + ':' + password)
         fetch('https://spendcontrol.herokuapp.com/api/tokens', {
             method: 'POST',
@@ -22,19 +27,19 @@ export default function Login({ navigation }) {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson.token) {
-                    signIn(responseJson.token)
+                    setToken(responseJson.token)
                 } else {
-                    Alert.alert('SignIn Error', 'Authorisation error')
+                    Alert.alert('SignIn', 'Authorisation error')
                 }
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
+                Alert.alert('SignIn', 'Authorisation error')
             });
     };
 
     return (
         <View style={globalStyles.container}>
-            <View style={globalStyles.loginForm}>
+            <View>
                 <ScrollView>
                     <TextInput 
                         style={globalStyles.loginInput}
@@ -51,7 +56,7 @@ export default function Login({ navigation }) {
                     <Button 
                         style={globalStyles.loginButton}
                         title='Sign In'
-                        onPress={clickHandler}
+                        onPress={signIn}
                     />
                 </ScrollView>
             </View>
