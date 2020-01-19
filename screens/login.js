@@ -8,9 +8,8 @@ import base64 from 'react-native-base64';
 export default function Login({ navigation }) {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
-    const [token, setToken] = useState('')
      
-    const getToken = () => {
+    const signIn = () => {
         const auth = 'Basic ' + base64.encode(login + ':' + password)
         fetch('https://spendcontrol.herokuapp.com/api/tokens', {
             method: 'POST',
@@ -22,22 +21,17 @@ export default function Login({ navigation }) {
             .then((responseJson) => {
                 if (responseJson.token) {
                     console.log('Token from backend recived: ' + responseJson.token)
-                    setToken(responseJson.token)
+                    AsyncStorage.setItem('userToken', responseJson.token)
                 } else {
                     console.log('There is no token in response from backend')
                     Alert.alert('SignIn', 'Authorisation error')
                 }
             })
+            .then(navigation.push('Home'))
             .catch((error) => {
                 console.error(error)
                 Alert.alert('SignIn', 'Authorisation error')
             });
-    }
-
-    const signIn = () => {
-        getToken()
-        AsyncStorage.setItem('userToken', token);
-        navigation.push('Home')
     }
 
     return (
