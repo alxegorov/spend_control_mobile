@@ -15,11 +15,4 @@ export const globalStyles = StyleSheet.create({
     inputForm: {
         marginTop: 10
     },
-    loginInput: {
-        borderWidth: 1,
-        borderColor: 'grey',
-        height: 40,
-        marginBottom: 10,
-        padding: 8,
-    },
 });

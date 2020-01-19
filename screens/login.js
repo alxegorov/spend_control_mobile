@@ -9,12 +9,6 @@ export default function Login({ navigation }) {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     const [token, setToken] = useState('')
-
-    const signIn = () => {
-        getToken()
-        AsyncStorage.setItem('userToken', token);
-        navigation.push('Home')
-    }
      
     const getToken = () => {
         const auth = 'Basic ' + base64.encode(login + ':' + password)
@@ -27,38 +21,45 @@ export default function Login({ navigation }) {
             .then((response) => response.json())
             .then((responseJson) => {
                 if (responseJson.token) {
+                    console.log('Token from backend recived: ' + responseJson.token)
                     setToken(responseJson.token)
                 } else {
+                    console.log('There is no token in response from backend')
                     Alert.alert('SignIn', 'Authorisation error')
                 }
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error(error)
                 Alert.alert('SignIn', 'Authorisation error')
             });
-    };
+    }
+
+    const signIn = () => {
+        getToken()
+        AsyncStorage.setItem('userToken', token);
+        navigation.push('Home')
+    }
 
     return (
         <View style={globalStyles.container}>
             <View>
-                <ScrollView>
-                    <TextInput 
-                        style={globalStyles.loginInput}
-                        placeholder='Username...'
-                        autoFocus={true}
-                        onChangeText={(value) => setLogin(value)}
-                    />
-                    <TextInput 
-                        style={globalStyles.loginInput}
-                        placeholder='Password...'
-                        secureTextEntry={true}
-                        onChangeText={(value) => setPassword(value)}
-                    />
-                    <Button 
-                        style={globalStyles.loginButton}
-                        title='Sign In'
-                        onPress={signIn}
-                    />
-                </ScrollView>
+                <TextInput 
+                    style={globalStyles.input}
+                    placeholder='Username...'
+                    autoFocus={true}
+                    onChangeText={(value) => setLogin(value)}
+                />
+                <TextInput 
+                    style={globalStyles.input}
+                    placeholder='Password...'
+                    secureTextEntry={true}
+                    onChangeText={(value) => setPassword(value)}
+                />
+                <Button 
+                    style={globalStyles.loginButton}
+                    title='Sign In'
+                    onPress={signIn}
+                /> 
             </View>
         </View>
     )

@@ -5,15 +5,11 @@ import { globalStyles } from "../styles/global";
 export default function Home({ navigation }) {
     const [username, setUsername] = useState('Guest')
 
-    const pressHandler = () => {
-        navigation.navigate('Login');
-    };
-
     getUsername = async () => {
         try {
             let token = await AsyncStorage.getItem('userToken')
+            console.log('Token from AsyncStorage recived: ' + token)
             let auth = 'Bearer ' + token
-            console.log(auth)
 
             let response = await fetch('https://spendcontrol.herokuapp.com/api/users/current', {
                 method: 'GET',
@@ -22,25 +18,30 @@ export default function Home({ navigation }) {
                 }
             })
             let responseJson = await response.json()
-            console.log(responseJson)
             if (responseJson.username) {
+                console.log('Username from backend recived: ' + responseJson.username)
                 setUsername(responseJson.username)
             } else {
+                console.log('There is no username in response from backend')
                 navigation.navigate('Login')
             }
-            console.log('end try')
         }
-        catch {
+        catch (error) {
+            console.error(error.message)
             navigation.navigate('Login')
         }
     }
 
     getUsername()
+
+    // const goLogin = () => {
+    //     navigation.navigate('Login');
+    // };
     
     return (
         <View style={globalStyles.container} o>   
             <Text>Hello, { username }</Text>
-            <Button title='Authorisation' onPress={pressHandler} />
+            {/* <Button title='Authorisation' onPress={goLogin} /> */}
             <View style={globalStyles.inputForm}>
                 <TextInput 
                     placeholder='Date...'
