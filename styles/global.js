@@ -10,9 +10,21 @@ export const globalStyles = StyleSheet.create({
         borderColor: 'grey',
         height: 40,
         marginBottom: 10,
-        padding: 8
+        padding: 8,
+        backgroundColor: 'white'
     },
     inputForm: {
-        marginTop: 10
+        marginBottom: 10
     },
-});
+    messageBox: {
+        marginBottom: 10,
+        backgroundColor: 'lightblue',
+        borderWidth: 1,
+        borderColor: 'powderblue',
+        borderRadius: 6,
+        color: 'navy',
+        padding: 10,
+        height: 50,
+        textAlignVertical: 'center'
+    },
+})

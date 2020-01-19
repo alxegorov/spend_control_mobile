@@ -36,7 +36,7 @@ export default function Login({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <View>
+            <View style={globalStyles.inputForm}>
                 <TextInput 
                     style={globalStyles.input}
                     placeholder='Username...'

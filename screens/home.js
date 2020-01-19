@@ -33,15 +33,10 @@ export default function Home({ navigation }) {
     }
 
     getUsername()
-
-    // const goLogin = () => {
-    //     navigation.navigate('Login');
-    // };
     
     return (
         <View style={globalStyles.container} o>   
-            <Text>Hello, { username }</Text>
-            {/* <Button title='Authorisation' onPress={goLogin} /> */}
+            <Text style={globalStyles.messageBox}>Hello, { username }</Text>
             <View style={globalStyles.inputForm}>
                 <TextInput 
                     placeholder='Date...'
