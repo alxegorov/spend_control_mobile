@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, AsyncStorage, Text } from "react-native";
 import { globalStyles } from "../styles/global";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 
 export default function Home({ navigation }) {
     const [username, setUsername] = useState('Guest')
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
 
     getUsername = async () => {
         try {
@@ -33,14 +36,44 @@ export default function Home({ navigation }) {
     }
 
     getUsername()
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    }
+    
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    }
+    
+    const handleDatePicker = date => {
+        console.warn("A date has been picked: ", date);
+        hideDatePicker();
+    }
     
     return (
         <View style={globalStyles.container} o>   
             <Text style={globalStyles.messageBox}>Hello, { username }</Text>
             <View style={globalStyles.inputForm}>
-                <TextInput 
-                    placeholder='Date...'
-                    style={globalStyles.input}
+                <View style={{flexDirection:'row'}}>
+                    <View style={{flex:4}}>
+                        <TextInput
+                            placeholder='Date...'
+                            style={globalStyles.input}
+                        />
+                    </View>
+                    <View style={{flex:1}}>
+                        <Button 
+                            title='Date'
+                            onPress={showDatePicker}
+                            height='50'
+                        />        
+                    </View>
+                </View>
+                <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleDatePicker}
+                    onCancel={hideDatePicker}
                 />
                 <TextInput 
                     placeholder='Trip...'

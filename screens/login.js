@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, TextInput, Button, Alert, AsyncStorage } from "react-native";
+import { View, TextInput, Button, Alert, AsyncStorage } from "react-native";
 import { globalStyles } from "../styles/global";
 import base64 from 'react-native-base64';
 
@@ -9,29 +9,28 @@ export default function Login({ navigation }) {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
      
-    const signIn = () => {
+    signIn = async () => {
         const auth = 'Basic ' + base64.encode(login + ':' + password)
-        fetch('https://spendcontrol.herokuapp.com/api/tokens', {
-            method: 'POST',
-            headers: {
-                Authorization: auth
-            }
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                if (responseJson.token) {
-                    console.log('Token from backend recived: ' + responseJson.token)
-                    AsyncStorage.setItem('userToken', responseJson.token)
-                } else {
-                    console.log('There is no token in response from backend')
-                    Alert.alert('SignIn', 'Authorisation error')
+        try {
+            let response = await fetch('https://spendcontrol.herokuapp.com/api/tokens', {
+                method: 'POST',
+                headers: {
+                    Authorization: auth
                 }
             })
-            .then(navigation.push('Home'))
-            .catch((error) => {
-                console.error(error)
+            let responseJson = await response.json()
+            if (responseJson.token) {
+                console.log('Token from backend recived: ' + responseJson.token)
+                AsyncStorage.setItem('userToken', responseJson.token)
+                navigation.push('Home')
+            } else {
+                console.log('There is no token in response from backend')
                 Alert.alert('SignIn', 'Authorisation error')
-            });
+            }
+        } catch(error) {
+            console.error(error)
+            Alert.alert('SignIn', 'Authorisation error')
+        }
     }
 
     return (
