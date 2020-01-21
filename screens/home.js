@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, AsyncStorage, Text } from "react-native";
+import { View, TextInput, Button, AsyncStorage, Text, TouchableOpacity } from "react-native";
 import { globalStyles } from "../styles/global";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function Home({ navigation }) {
@@ -55,18 +56,27 @@ export default function Home({ navigation }) {
             <Text style={globalStyles.messageBox}>Hello, { username }</Text>
             <View style={globalStyles.inputForm}>
                 <View style={{flexDirection:'row'}}>
-                    <View style={{flex:4}}>
+                    <View style={{flex:7}}>
                         <TextInput
                             placeholder='Date...'
-                            style={globalStyles.input}
+                            style={{borderLeftWidth : 1,
+                                borderTopWidth: 1,
+                                borderBottomWidth: 1,
+                                borderTopLeftRadius: 10,
+                                borderBottomLeftRadius: 10,
+                                borderColor: 'grey',
+                                height: 40,
+                                marginBottom: 10,
+                                padding: 8,
+                                backgroundColor: 'white'}}
                         />
                     </View>
                     <View style={{flex:1}}>
-                        <Button 
-                            title='Date'
-                            onPress={showDatePicker}
-                            height='50'
-                        />        
+                        <TouchableOpacity onPress={showDatePicker}
+                        style={{backgroundColor: 'white', height: 40, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderTopWidth: 1, borderRightWidth: 1, borderColor: 'grey', borderTopRightRadius: 10, borderBottomRightRadius: 10}}
+                        >
+                            <Ionicons name='md-calendar' size={32} /> 
+                        </TouchableOpacity>      
                     </View>
                 </View>
                 <DateTimePickerModal

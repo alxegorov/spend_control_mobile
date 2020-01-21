@@ -11,7 +11,8 @@ export const globalStyles = StyleSheet.create({
         height: 40,
         marginBottom: 10,
         padding: 8,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        borderRadius: 10
     },
     inputForm: {
         marginBottom: 10
