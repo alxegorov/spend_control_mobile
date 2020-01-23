@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, AsyncStorage, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Button, AsyncStorage, Text } from "react-native";
 import { globalStyles } from "../styles/global";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Ionicons } from '@expo/vector-icons';
+import InputDate from '../components/inputDate';
 
 
 export default function Home({ navigation }) {
     const [username, setUsername] = useState('Guest')
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
 
     getUsername = async () => {
         try {
@@ -38,53 +36,11 @@ export default function Home({ navigation }) {
 
     getUsername()
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    }
-    
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    }
-    
-    const handleDatePicker = date => {
-        console.warn("A date has been picked: ", date);
-        hideDatePicker();
-    }
-    
     return (
         <View style={globalStyles.container} o>   
             <Text style={globalStyles.messageBox}>Hello, { username }</Text>
             <View style={globalStyles.inputForm}>
-                <View style={{flexDirection:'row'}}>
-                    <View style={{flex:7}}>
-                        <TextInput
-                            placeholder='Date...'
-                            style={{borderLeftWidth : 1,
-                                borderTopWidth: 1,
-                                borderBottomWidth: 1,
-                                borderTopLeftRadius: 10,
-                                borderBottomLeftRadius: 10,
-                                borderColor: 'grey',
-                                height: 40,
-                                marginBottom: 10,
-                                padding: 8,
-                                backgroundColor: 'white'}}
-                        />
-                    </View>
-                    <View style={{flex:1}}>
-                        <TouchableOpacity onPress={showDatePicker}
-                        style={{backgroundColor: 'white', height: 40, justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderTopWidth: 1, borderRightWidth: 1, borderColor: 'grey', borderTopRightRadius: 10, borderBottomRightRadius: 10}}
-                        >
-                            <Ionicons name='md-calendar' size={32} /> 
-                        </TouchableOpacity>      
-                    </View>
-                </View>
-                <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    onConfirm={handleDatePicker}
-                    onCancel={hideDatePicker}
-                />
+                <InputDate />
                 <TextInput 
                     placeholder='Trip...'
                     style={globalStyles.input}
