@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, AsyncStorage, Text } from "react-native";
+import { View, TextInput, Button, AsyncStorage, Text, Picker } from "react-native";
 import { globalStyles } from "../styles/global";
 import InputDate from '../components/inputDate';
 
 
 export default function Home({ navigation }) {
     const [username, setUsername] = useState('Guest')
+    const [spendType, setSpendType] = useState('')
 
     getUsername = async () => {
         try {
@@ -40,13 +41,19 @@ export default function Home({ navigation }) {
         <View style={globalStyles.container} o>   
             <Text style={globalStyles.messageBox}>Hello, { username }</Text>
             <View style={globalStyles.inputForm}>
-                <InputDate />
+                <InputDate /> 
+                <View style={{borderWidth: 1, borderColor: 'grey', borderRadius: 10, marginBottom: 10, backgroundColor: 'white'}}>
+                    <Picker
+                        selectedValue = {spendType} 
+                        style = {{height: 40}}
+                        onValueChange={(itemValue) => {setSpendType(itemValue)}}>
+                        <Picker.Item label="Gasoline 92" value='1' />   
+                        <Picker.Item label="Gasoline 95" value='2' />
+                        <Picker.Item label="Gasoline 98" value="3" />
+                    </Picker>
+                </View>
                 <TextInput 
                     placeholder='Trip...'
-                    style={globalStyles.input}
-                />
-                <TextInput 
-                    placeholder='Type...'
                     style={globalStyles.input}
                 />
                 <TextInput 
@@ -54,7 +61,7 @@ export default function Home({ navigation }) {
                     style={globalStyles.input}
                 />
                 <TextInput 
-                    placeholder='Munt...'
+                    placeholder='Mount...'
                     style={globalStyles.input}
                 />
                 <Button 
