@@ -5,7 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Ionicons } from '@expo/vector-icons';
 import Moment from 'moment'
 
-export default function InputDate() {
+export default function InputDate({ submitDateHandler }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [text, setText] = useState('')
 
@@ -20,7 +20,7 @@ export default function InputDate() {
     const handleDatePicker = date => {  
         hideDatePicker();
         setText(Moment(date).format('MMMM Do YYYY'));
-        console.log(date)
+        submitDateHandler(date)
 
     };
     

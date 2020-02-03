@@ -10,8 +10,12 @@ export default class Home extends Component {
         super(props)
         this.state={
             username: 'Guest',
+            types: [{value: 'Spend type', id: 1}],
+            date: '',
             spendType: '1',
-            types: []
+            trip: '',
+            price: '',
+            mount: ''
         }
     }
 
@@ -40,7 +44,7 @@ export default class Home extends Component {
             this.props.navigation.navigate('Login')
         }
     }
-x
+
     getSpendTyps = async() => {
         try{
             let token = await AsyncStorage.getItem('userToken')
@@ -50,20 +54,33 @@ x
                     Authorization: 'Bearer ' + token,
                 }
             })
-            let responseJson = await response.json()
-            this.setState({types: responseJson})
+            if (response.ok) {
+                let responseJson = await response.json()
+                this.setState({types: responseJson})
+            }
         }
         catch(error) {
             console.error(error)
         }
     }
 
+    submitDateHandler = (text) => {
+        this.setState({date: text})
+    }
+
+    submitSpendHandler = () => {
+        let data = {"date":this.state.date,"type":this.state.spendType,"trip":this.state.trip,"prise":this.state.price,"mount":this.state.mount}
+        let dataJson = JSON.stringify(data)
+        console.log(dataJson)
+    }
+
+
     render() {     
         return (
             <View style={globalStyles.container} o>   
                 <Text style={globalStyles.messageBox}>Hello, { this.state.username }</Text>
                 <View style={globalStyles.inputForm}>
-                    <InputDate /> 
+                    <InputDate submitDateHandler={this.submitDateHandler} /> 
                     <View style={{borderWidth: 1, borderColor: 'grey', borderRadius: 10, marginBottom: 10, backgroundColor: 'white'}}>
                         <Picker
                             selectedValue = { this.state.spendType } 
@@ -79,17 +96,21 @@ x
                     <TextInput 
                         placeholder='Trip...'
                         style={globalStyles.input}
+                        onChangeText={(text) => this.setState({trip: text})}
                     />
                     <TextInput 
                         placeholder='Prise...'
                         style={globalStyles.input}
+                        onChangeText={(text) => this.setState({price: text})}
                     />
                     <TextInput 
                         placeholder='Mount...'
                         style={globalStyles.input}
+                        onChangeText={(text) => this.setState({mount: text})}
                     />
                     <Button 
-                        title='Add' 
+                        title='Add'
+                        onPress={this.submitSpendHandler}
                     />
                 </View>
             </View>
