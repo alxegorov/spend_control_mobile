@@ -11,7 +11,9 @@ export default class Home extends Component {
         this.state={
             username: 'Guest',
             types: [{value: 'Spend type', id: 1}],
+            cars: [{value: 'Car', id: 1}],
             date: '',
+            car: '1',
             spendType: '1',
             trip: '',
             price: '',
@@ -21,6 +23,7 @@ export default class Home extends Component {
 
     componentDidMount(){
         this.getUsername()
+        this.getCars()
         this.getSpendTyps()
     }
 
@@ -64,12 +67,31 @@ export default class Home extends Component {
         }
     }
 
+    getCars = async() => {
+        try{
+            let token = await AsyncStorage.getItem('userToken')
+            let response = await fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/cars', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                }
+            })
+            if (response.ok) {
+                let responseJson = await response.json()
+                this.setState({cars: responseJson})
+            }
+        }
+        catch(error) {
+            console.error(error)
+        }
+    }
+
     submitDateHandler = (text) => {
         this.setState({date: text})
     }
 
     submitSpendHandler = () => {
-        let data = {"date":this.state.date,"type":this.state.spendType,"trip":this.state.trip,"prise":this.state.price,"mount":this.state.mount}
+        let data = {"date":this.state.date,"car":this.state.car,"type":this.state.spendType,"trip":this.state.trip,"price":this.state.price,"mount":this.state.mount}
         let dataJson = JSON.stringify(data)
         console.log(dataJson)
     }
@@ -81,7 +103,19 @@ export default class Home extends Component {
                 <Text style={globalStyles.messageBox}>Hello, { this.state.username }</Text>
                 <View style={globalStyles.inputForm}>
                     <InputDate submitDateHandler={this.submitDateHandler} /> 
-                    <View style={{borderWidth: 1, borderColor: 'grey', borderRadius: 10, marginBottom: 10, backgroundColor: 'white'}}>
+                    <View style={globalStyles.pickerBox}>
+                        <Picker
+                            selectedValue = { this.state.car } 
+                            style = {{height: 40}}
+                            onValueChange={(itemValue) => {this.setState({car: itemValue})}}>
+                            {this.state.cars.map((data) => {
+                                return (
+                                    <Picker.Item label={data.value} value={data.id} key={data.id} />
+                                )
+                            })}
+                        </Picker>
+                    </View>
+                    <View style={globalStyles.pickerBox}>
                         <Picker
                             selectedValue = { this.state.spendType } 
                             style = {{height: 40}}
@@ -104,7 +138,7 @@ export default class Home extends Component {
                         onChangeText={(text) => this.setState({price: text})}
                     />
                     <TextInput 
-                        placeholder='Mount...'
+                        placeholder='Amount...'
                         style={globalStyles.input}
                         onChangeText={(text) => this.setState({mount: text})}
                     />

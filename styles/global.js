@@ -16,6 +16,13 @@ export const globalStyles = StyleSheet.create({
         height: 50,
         textAlignVertical: 'center'
     },
+    pickerBox: {
+        borderWidth: 1, 
+        borderColor: 'grey', 
+        borderRadius: 10, 
+        marginBottom: 10, 
+        backgroundColor: 'white'
+    },
     inputForm: {
         marginBottom: 10
     },   
