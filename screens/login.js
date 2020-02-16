@@ -83,7 +83,7 @@ export default class Login extends Component {
                         onChangeText={(value) => this.setState({password: value})}
                         value={this.state.password}
                     />
-                    <View style={{flexDirection:'row', marginBottom: 10, alignItems: "center"}}>
+                    <View style={globalStyles.ithem}>
                         <Text style={{marginRight: 10}}>Remember Me</Text>
                         <Switch 
                             value={this.state.rememberMe}

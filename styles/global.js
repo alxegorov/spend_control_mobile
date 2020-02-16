@@ -5,6 +5,11 @@ export const globalStyles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
+    ithem: {
+        flexDirection:'row', 
+        marginBottom: 10, 
+        alignItems: "center"
+    },
     messageBox: {
         marginBottom: 10,
         backgroundColor: 'lightblue',

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, TextInput, Button, AsyncStorage, Text, Picker } from "react-native";
+import { View, TextInput, Button, AsyncStorage, Text, Picker, AppState } from "react-native";
 import { globalStyles } from "../styles/global";
 import InputDate from '../components/inputDate';
 
@@ -17,7 +17,8 @@ export default class Home extends Component {
             spendType: '1',
             trip: '',
             price: '',
-            mount: ''
+            mount: '',
+            appState: AppState.currentState
         }
     }
 
@@ -25,6 +26,18 @@ export default class Home extends Component {
         this.getUsername()
         this.getCars()
         this.getSpendTyps()
+        AppState.addEventListener('change', this._handleAppStateChange)
+    }
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this._handleAppStateChange)
+    }
+
+    _handleAppStateChange = (nextAppState) => {
+        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+            this.getUsername()
+        }
+        this.setState({appState: nextAppState})
     }
 
     getUsername = async() => {
