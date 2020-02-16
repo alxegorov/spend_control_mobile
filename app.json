@@ -27,7 +27,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.monycontrol.spendcontrol",
+      "package": "com.moneycontrol.spendcontrol",
       "versionCode": 1
     }
   }

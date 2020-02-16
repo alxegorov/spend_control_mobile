@@ -21,7 +21,7 @@ export default class Home extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getUsername()
         this.getCars()
         this.getSpendTyps()
