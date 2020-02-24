@@ -19,7 +19,8 @@ export default class Home extends Component {
             price: '',
             mount: '',
             appState: AppState.currentState,
-            fuelConsumtion: 10
+            fuelConsumtion: 10,
+            kmPrice: 1
         }
     }
 
@@ -29,6 +30,7 @@ export default class Home extends Component {
         this.getSpendTyps()
         AppState.addEventListener('change', this._handleAppStateChange)
         this.getFuelEconomy()
+        this.getKmPrice()
     }
 
     componentWillUnmount() {
@@ -114,6 +116,26 @@ export default class Home extends Component {
             if (response.ok) {
                 let responseJson = await response.json()
                 this.setState({fuelConsumtion: responseJson.fuel_consumtion})
+            }
+        }
+        catch(error) {
+            console.error(error)
+        }
+    }
+
+    getKmPrice = async() => {
+        try {
+            let token = await AsyncStorage.getItem('userToken')
+            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/kmprice'
+            let response = await fetch(link, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                }
+            })
+            if (response.ok) {
+                let responseJson = await response.json()
+                this.setState({kmPrice: responseJson.unit_price})
             }
         }
         catch(error) {
@@ -210,18 +232,18 @@ export default class Home extends Component {
                 <View>
                     <View style={globalStyles.ithem}>
                         <View style={globalStyles.leftBar}>
-                        <Text style={{fontSize: 26}}>{this.state.fuelConsumtion} L/100km</Text>
+                            <Text style={{fontSize: 24}}>{this.state.fuelConsumtion} L/100km</Text>
                         </View>
                         <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 26}}>123</Text>
+                            <Text style={{fontSize: 24}}>{this.state.kmPrice} RUB/km</Text>
                         </View>
                     </View>
                     <View style={globalStyles.ithem}>
                         <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 26}}>123</Text>
+                            <Text style={{fontSize: 24}}>123</Text>
                         </View>
                         <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 26}}>123</Text>
+                            <Text style={{fontSize: 24}}>123</Text>
                         </View>
                     </View>
                 </View>
