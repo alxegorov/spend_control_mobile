@@ -52,6 +52,9 @@ export const globalStyles = StyleSheet.create({
         padding: 8,
         backgroundColor: 'white'
     },
+    button: {
+        marginBottom: 10
+    },
     buttonForInput: {
         backgroundColor: 'white', 
         height: 40, 
@@ -64,4 +67,19 @@ export const globalStyles = StyleSheet.create({
         borderTopRightRadius: 10, 
         borderBottomRightRadius: 10
     },
+    leftBar: {
+        flex: 1, 
+        borderColor: 'black', 
+        borderWidth: 1, 
+        marginRight: 10, 
+        padding: 10, 
+        alignItems: 'center',
+    },
+    rightBar: {
+        flex: 1, 
+        borderColor: 'black', 
+        borderWidth: 1, 
+        padding: 10, 
+        alignItems: 'center'
+    }
 })

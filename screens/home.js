@@ -18,7 +18,8 @@ export default class Home extends Component {
             trip: '',
             price: '',
             mount: '',
-            appState: AppState.currentState
+            appState: AppState.currentState,
+            fuelConsumtion: 10
         }
     }
 
@@ -27,6 +28,7 @@ export default class Home extends Component {
         this.getCars()
         this.getSpendTyps()
         AppState.addEventListener('change', this._handleAppStateChange)
+        this.getFuelEconomy()
     }
 
     componentWillUnmount() {
@@ -81,7 +83,7 @@ export default class Home extends Component {
     }
 
     getCars = async() => {
-        try{
+        try {
             let token = await AsyncStorage.getItem('userToken')
             let response = await fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/cars', {
                 method: 'GET',
@@ -92,6 +94,26 @@ export default class Home extends Component {
             if (response.ok) {
                 let responseJson = await response.json()
                 this.setState({cars: responseJson})
+            }
+        }
+        catch(error) {
+            console.error(error)
+        }
+    }
+
+    getFuelEconomy = async() => {
+        try {
+            let token = await AsyncStorage.getItem('userToken')
+            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/fuelconsumtion'
+            let response = await fetch(link, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                }
+            })
+            if (response.ok) {
+                let responseJson = await response.json()
+                this.setState({fuelConsumtion: responseJson.fuel_consumtion})
             }
         }
         catch(error) {
@@ -182,7 +204,26 @@ export default class Home extends Component {
                     <Button 
                         title='Add'
                         onPress={this.submitSpendHandler}
+                        style={globalStyles.button}
                     />
+                </View>
+                <View>
+                    <View style={globalStyles.ithem}>
+                        <View style={globalStyles.leftBar}>
+                        <Text style={{fontSize: 26}}>{this.state.fuelConsumtion} L/100km</Text>
+                        </View>
+                        <View style={globalStyles.rightBar}>
+                            <Text style={{fontSize: 26}}>123</Text>
+                        </View>
+                    </View>
+                    <View style={globalStyles.ithem}>
+                        <View style={globalStyles.leftBar}>
+                            <Text style={{fontSize: 26}}>123</Text>
+                        </View>
+                        <View style={globalStyles.rightBar}>
+                            <Text style={{fontSize: 26}}>123</Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         )
