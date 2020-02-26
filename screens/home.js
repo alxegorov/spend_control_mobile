@@ -20,7 +20,9 @@ export default class Home extends Component {
             mount: '',
             appState: AppState.currentState,
             fuelConsumtion: 10,
-            kmPrice: 1
+            kmPrice: 10,
+            mounthPrice: 10,
+            yearPrice: 10
         }
     }
 
@@ -31,6 +33,8 @@ export default class Home extends Component {
         AppState.addEventListener('change', this._handleAppStateChange)
         this.getFuelEconomy()
         this.getKmPrice()
+        this.getMountPrice()
+        this.getYearPrice()
     }
 
     componentWillUnmount() {
@@ -143,6 +147,46 @@ export default class Home extends Component {
         }
     }
 
+    getMountPrice = async() => {
+        try {
+            let token = await AsyncStorage.getItem('userToken')
+            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/mounthprice'
+            let response = await fetch(link, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                }
+            })
+            if (response.ok) {
+                let responseJson = await response.json()
+                this.setState({mounthPrice: responseJson.mounth_price})
+            }
+        }
+        catch(error) {
+            console.error(error)
+        }
+    }
+
+    getYearPrice = async() => {
+        try {
+            let token = await AsyncStorage.getItem('userToken')
+            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/yearprice'
+            let response = await fetch(link, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                }
+            })
+            if (response.ok) {
+                let responseJson = await response.json()
+                this.setState({yearPrice: responseJson.year_price})
+            }
+        }
+        catch(error) {
+            console.error(error)
+        }
+    }
+
     postSpend = async(dataJson) => {
         try{
             let token = await AsyncStorage.getItem('userToken')
@@ -180,7 +224,7 @@ export default class Home extends Component {
 
     render() {     
         return (
-            <View style={globalStyles.container} o>   
+            <View style={globalStyles.container}>   
                 <Text style={globalStyles.messageBox}>{ this.state.message }</Text>
                 <View style={globalStyles.inputForm}>
                     <InputDate submitDateHandler={this.submitDateHandler} /> 
@@ -240,10 +284,10 @@ export default class Home extends Component {
                     </View>
                     <View style={globalStyles.ithem}>
                         <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 24}}>123</Text>
+                            <Text style={{fontSize: 24}}>{this.state.mounthPrice} RUB/M</Text>
                         </View>
                         <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 24}}>123</Text>
+                            <Text style={{fontSize: 24}}>{this.state.yearPrice} RUB/Y</Text>
                         </View>
                     </View>
                 </View>
