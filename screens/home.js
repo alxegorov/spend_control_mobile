@@ -276,21 +276,21 @@ export default class Home extends Component {
                 <View>
                     <View style={globalStyles.ithem}>
                         <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 50}}>{this.state.fuelConsumtion}</Text>
+                            <Text style={{fontSize: 40}}>{this.state.fuelConsumtion}</Text>
                             <Text style={{fontSize: 24}}>L/100km</Text>
                         </View>
                         <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 50}}>{this.state.kmPrice}</Text>
+                            <Text style={{fontSize: 40}}>{this.state.kmPrice}</Text>
                             <Text style={{fontSize: 24}}>RUB/100km</Text>
                         </View>
                     </View>
                     <View style={globalStyles.ithem}>
                         <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 50}}>{this.state.mounthPrice}</Text>
+                            <Text style={{fontSize: 40}}>{this.state.mounthPrice}</Text>
                             <Text style={{fontSize: 24}}>RUB/M</Text>
                         </View>
                         <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 50}}>{this.state.yearPrice}</Text>
+                            <Text style={{fontSize: 40}}>{this.state.yearPrice}</Text>
                             <Text style={{fontSize: 24}}>RUB/Y</Text>
                         </View>
                     </View>
