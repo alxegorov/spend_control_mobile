@@ -29,7 +29,6 @@
     "android": {
       "package": "com.moneycontrol.spendcontrol",
       "versionCode": 1
-    },
-    "entryPoint": ".vscode/exponentIndex.js"
+    }
   }
 }

@@ -20,7 +20,7 @@ export default class Home extends React.Component {
             mount: '',
             fuelConsumption: global.startData.fuel_consumption,
             kmPrice: global.startData.unit_price,
-            monthPrice: global.startData.mouth_price,
+            monthPrice: global.startData.month_price,
             yearPrice: global.startData.year_price,
             appState: AppState.currentState,
         }
@@ -36,32 +36,9 @@ export default class Home extends React.Component {
 
     _handleAppStateChange = (nextAppState) => {
         if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-            this.getUsername()
+            // Get updates
         }
         this.setState({appState: nextAppState})
-    }
-
-    postSpend = async(dataJson) => {
-        try{
-            let response = await fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/newspend', {
-                method: 'POST',
-                headers: {
-                    Authorization: global.startData.tokenAuth,
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: dataJson
-            })
-            if (response.ok) {
-                this.setState({message: 'Spend added'})
-            }
-            else {
-                this.setState({message: 'Error: ' + response.status})
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
     }
 
     submitDateHandler = (text) => {
@@ -71,7 +48,22 @@ export default class Home extends React.Component {
     submitSpendHandler = () => {
         let data = {"date":this.state.date,"car":this.state.car,"type":this.state.spendType,"trip":this.state.trip,"price":this.state.price,"mount":this.state.mount}
         let dataJson = JSON.stringify(data)
-        this.postSpend(dataJson)
+        fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/newspend', {
+            method: 'POST',
+            headers: {
+                Authorization: global.startData.tokenAuth,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: dataJson
+        }).then((response) => {
+            if (response.ok) {
+                this.setState({message: 'Spend added'})
+            } else {
+                this.setState({message: 'Error: ' + response.status})
+            }
+        })
+        
     }
 
 
