@@ -6,8 +6,12 @@ import { API_URL } from './config'
 import Navigator from "./routes/drawer"
 
 export default class App extends React.Component {
-  state = {
-    isReady: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      isReady: false
+    }
+    global.startData = {}
   }
 
   render() {
@@ -34,18 +38,30 @@ export default class App extends React.Component {
         let auth = 'Basic ' + base64.encode(login + ':' + password)
         let tokenUrl = API_URL + 'tokens'
         let response = await fetch(tokenUrl, {
-                method: 'POST',
-                headers: {
-                    Authorization: auth
-                }
-            })
+            method: 'POST',
+            headers: {
+              Authorization: auth
+          }
+        })
         if (response.ok) {
           let responseJson = await response.json()
           let tokenAuth = 'Bearer ' + responseJson.token
-          // Get data from backend
+          let startDataUrl = API_URL + 'spends/move/car/start'
+          let startDataResponse = await fetch(startDataUrl, {
+            method: 'GET',
+            headers: {
+              Authorization: tokenAuth
+            }
+          })
+          if (startDataResponse.ok) {
+            let startDataResponseJson = await startDataResponse.json()
+            startDataResponseJson.tokenAuth = tokenAuth
+            global.startData = startDataResponseJson
+            global.initialRouteName = 'Home'
+          }
         }      
       } else {
-        // Unaythorisated data
+        global.initialRouteName = 'Login'
       }
     }
     catch {

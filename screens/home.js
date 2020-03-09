@@ -1,40 +1,33 @@
-import React, { Component } from "react";
-import { View, TextInput, Button, AsyncStorage, Text, Picker, AppState } from "react-native";
+import React from "react";
+import { View, TextInput, Button, Text, Picker, AppState } from "react-native";
 import { globalStyles } from "../styles/global";
 import InputDate from '../components/inputDate';
 
 
-export default class Home extends Component {
+export default class Home extends React.Component {
     
     constructor(props){
         super(props)
         this.state={
-            message: 'Hello, Guest',
-            types: [{value: 'Spend type', id: 1}],
-            cars: [{value: 'Car', id: 1}],
+            message: 'Hello, ' + global.startData.username,
             date: '',
+            cars: global.startData.cars_list,
             car: '1',
+            types: global.startData.spend_types,
             spendType: '1',
             trip: '',
             price: '',
             mount: '',
+            fuelConsumption: global.startData.fuel_consumption,
+            kmPrice: global.startData.unit_price,
+            monthPrice: global.startData.mouth_price,
+            yearPrice: global.startData.year_price,
             appState: AppState.currentState,
-            fuelConsumtion: 10,
-            kmPrice: 10,
-            mounthPrice: 10,
-            yearPrice: 10
         }
     }
 
     componentDidMount() {
-        this.getUsername()
-        this.getCars()
-        this.getSpendTyps()
         AppState.addEventListener('change', this._handleAppStateChange)
-        this.getFuelEconomy()
-        this.getKmPrice()
-        this.getMountPrice()
-        this.getYearPrice()
     }
 
     componentWillUnmount() {
@@ -48,152 +41,12 @@ export default class Home extends Component {
         this.setState({appState: nextAppState})
     }
 
-    getUsername = async() => {
-        try {
-            let token = await AsyncStorage.getItem('userToken')
-            let response = await fetch('https://spendcontrol.herokuapp.com/api/users/current', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                }
-            })
-            let responseJson = await response.json()
-            if (responseJson.username) {
-                this.setState({message: 'Hello, ' + responseJson.username})
-            } else {
-                this.props.navigation.navigate('Login')
-            }
-        }
-        catch {
-            this.props.navigation.navigate('Login')
-        }
-    }
-
-    getSpendTyps = async() => {
-        try{
-            let token = await AsyncStorage.getItem('userToken')
-            let response = await fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/types', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                }
-            })
-            if (response.ok) {
-                let responseJson = await response.json()
-                this.setState({types: responseJson})
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
-
-    getCars = async() => {
-        try {
-            let token = await AsyncStorage.getItem('userToken')
-            let response = await fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/cars', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                }
-            })
-            if (response.ok) {
-                let responseJson = await response.json()
-                this.setState({cars: responseJson})
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
-
-    getFuelEconomy = async() => {
-        try {
-            let token = await AsyncStorage.getItem('userToken')
-            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/fuelconsumtion'
-            let response = await fetch(link, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                }
-            })
-            if (response.ok) {
-                let responseJson = await response.json()
-                this.setState({fuelConsumtion: responseJson.fuel_consumtion})
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
-
-    getKmPrice = async() => {
-        try {
-            let token = await AsyncStorage.getItem('userToken')
-            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/kmprice'
-            let response = await fetch(link, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                }
-            })
-            if (response.ok) {
-                let responseJson = await response.json()
-                this.setState({kmPrice: responseJson.unit_price})
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
-
-    getMountPrice = async() => {
-        try {
-            let token = await AsyncStorage.getItem('userToken')
-            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/mounthprice'
-            let response = await fetch(link, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                }
-            })
-            if (response.ok) {
-                let responseJson = await response.json()
-                this.setState({mounthPrice: responseJson.mounth_price})
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
-
-    getYearPrice = async() => {
-        try {
-            let token = await AsyncStorage.getItem('userToken')
-            let link = 'https://spendcontrol.herokuapp.com/api/spends/move/car/' + this.state.car + '/yearprice'
-            let response = await fetch(link, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + token,
-                }
-            })
-            if (response.ok) {
-                let responseJson = await response.json()
-                this.setState({yearPrice: responseJson.year_price})
-            }
-        }
-        catch(error) {
-            console.error(error)
-        }
-    }
-
     postSpend = async(dataJson) => {
         try{
-            let token = await AsyncStorage.getItem('userToken')
             let response = await fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/newspend', {
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + token,
+                    Authorization: global.startData.tokenAuth,
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
@@ -203,7 +56,7 @@ export default class Home extends Component {
                 this.setState({message: 'Spend added'})
             }
             else {
-                console.log(response.status)
+                this.setState({message: 'Error: ' + response.status})
             }
         }
         catch(error) {
@@ -274,19 +127,19 @@ export default class Home extends Component {
                     />
                 </View>
                 <View>
-                    <View style={globalStyles.ithem}>
+                    <View style={globalStyles.item}>
                         <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 40}}>{this.state.fuelConsumtion}</Text>
+                            <Text style={{fontSize: 40}}>{this.state.fuelConsumption}</Text>
                             <Text style={{fontSize: 24}}>L/100km</Text>
                         </View>
                         <View style={globalStyles.rightBar}>
                             <Text style={{fontSize: 40}}>{this.state.kmPrice}</Text>
-                            <Text style={{fontSize: 24}}>RUB/100km</Text>
+                            <Text style={{fontSize: 24}}>RUB/km</Text>
                         </View>
                     </View>
-                    <View style={globalStyles.ithem}>
+                    <View style={globalStyles.item}>
                         <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 40}}>{this.state.mounthPrice}</Text>
+                            <Text style={{fontSize: 40}}>{this.state.monthPrice}</Text>
                             <Text style={{fontSize: 24}}>RUB/M</Text>
                         </View>
                         <View style={globalStyles.rightBar}>

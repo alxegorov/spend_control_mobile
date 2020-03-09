@@ -5,7 +5,7 @@ export const globalStyles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
-    ithem: {
+    item: {
         flexDirection:'row', 
         marginBottom: 10, 
         alignItems: "center"

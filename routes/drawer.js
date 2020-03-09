@@ -3,13 +3,14 @@ import { createAppContainer } from "react-navigation";
 import HomeStack from "./homeStack"
 import LoginStack from "./loginStack";
 
-const RootDrawerNavigator = createDrawerNavigator({
-    Home: {
-        screen: HomeStack,
+const RootDrawerNavigator = createDrawerNavigator(
+    {
+        Home: {screen: HomeStack},
+        Login: {screen: LoginStack}
     },
-    Login: {
-        screen: LoginStack,
-    },
-});
+    {
+        initialRouteName: global.initialRouteName
+    }
+);
 
 export default createAppContainer(RootDrawerNavigator);
