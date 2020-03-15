@@ -83,7 +83,7 @@ export default class Login extends React.Component {
                         onChangeText={(value) => this.setState({password: value})}
                         value={this.state.password}
                     />
-                    <View style={globalStyles.ithem}>
+                    <View style={globalStyles.item}>
                         <Text style={{marginRight: 10}}>Remember Me</Text>
                         <Switch 
                             value={this.state.rememberMe}
