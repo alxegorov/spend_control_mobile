@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import { View, TextInput, Button, Alert, AsyncStorage, Switch, Text } from "react-native";
 import { globalStyles } from "../styles/global";
 import base64 from 'react-native-base64';
+import { API_URL } from '../config'
 
 
 
-export default class Login extends Component {
+export default class Login extends React.Component {
     constructor(props){
         super(props)
         this.state={
@@ -20,13 +21,12 @@ export default class Login extends Component {
         this.checkSavedAuth()
     }
          
-    signIn = async () => {
-        if (this.state.rememberMe) {
-            this.saveAuth()
-        }
-        const auth = 'Basic ' + base64.encode(this.state.login + ':' + this.state.password)
+    async signIn() {
+        if (this.state.rememberMe) {this.saveAuth()}        
         try {
-            let response = await fetch('https://spendcontrol.herokuapp.com/api/tokens', {
+            let auth = 'Basic ' + base64.encode(this.state.login + ':' + this.state.password)
+            let url = API_URL + 'tokens'
+            let response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     Authorization: auth
@@ -37,10 +37,10 @@ export default class Login extends Component {
                 AsyncStorage.setItem('userToken', responseJson.token)
                 this.props.navigation.push('Home')
             } else {
-                Alert.alert('SignIn', 'Authorisation error')
+                Alert.alert('SignIn', 'Authorization error')
             }
         } catch(error) {
-            Alert.alert('SignIn', 'Authorisation error')
+            Alert.alert('SignIn', 'Authorization error')
         }
     }
 
