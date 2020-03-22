@@ -10,17 +10,6 @@ export const globalStyles = StyleSheet.create({
         marginBottom: 10, 
         alignItems: "center"
     },
-    messageBox: {
-        marginBottom: 10,
-        backgroundColor: 'lightblue',
-        borderWidth: 1,
-        borderColor: 'powderblue',
-        borderRadius: 6,
-        color: 'navy',
-        padding: 10,
-        height: 50,
-        textAlignVertical: 'center'
-    },
     pickerBox: {
         borderWidth: 1, 
         borderColor: 'grey', 

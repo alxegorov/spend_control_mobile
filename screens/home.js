@@ -1,7 +1,8 @@
 import React from "react";
-import { View, TextInput, Button, Text, Picker, AppState } from "react-native";
+import { View, TextInput, Button, Text, Picker, AppState, Alert } from "react-native";
 import { globalStyles } from "../styles/global";
 import InputDate from '../components/inputDate';
+import { API_URL } from '../config'
 
 
 export default class Home extends React.Component {
@@ -9,8 +10,7 @@ export default class Home extends React.Component {
     constructor(props){
         super(props)
         this.state={
-            message: 'Hello, ' + global.startData.username,
-            date: '',
+            date: new Date(),
             cars: global.startData.cars_list,
             car: '1',
             types: global.startData.spend_types,
@@ -36,7 +36,7 @@ export default class Home extends React.Component {
 
     _handleAppStateChange = (nextAppState) => {
         if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-            // Get updates
+            this.updateData()
         }
         this.setState({appState: nextAppState})
     }
@@ -48,7 +48,8 @@ export default class Home extends React.Component {
     submitSpendHandler = () => {
         let data = {"date":this.state.date,"car":this.state.car,"type":this.state.spendType,"trip":this.state.trip,"price":this.state.price,"mount":this.state.mount}
         let dataJson = JSON.stringify(data)
-        fetch('https://spendcontrol.herokuapp.com/api/spends/move/car/newspend', {
+        let url = API_URL + 'spends/move/car/newspend'
+        fetch(url, {
             method: 'POST',
             headers: {
                 Authorization: global.startData.tokenAuth,
@@ -58,21 +59,46 @@ export default class Home extends React.Component {
             body: dataJson
         }).then((response) => {
             if (response.ok) {
-                this.setState({message: 'Spend added'})
+                this.updateData()
+                this.priceInput.clear()
+                this.amountInput.clear()
+                Alert.alert('Spend Control', 'Spend successful added')
             } else {
-                this.setState({message: 'Error: ' + response.status})
+                Alert.alert('Spend Control', 'Error: ' + response.status)
             }
         })
         
+    }
+
+    updateData() {
+        let url = API_URL + 'spends/move/car/start'
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                Authorization: global.startData.tokenAuth
+            }
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                responseJson.tokenAuth = global.startData.tokenAuth
+                global.startData = responseJson
+                this.setState({
+                    cars: responseJson.cars_list,
+                    types: responseJson.spend_types,
+                    fuelConsumption: responseJson.fuel_consumption,
+                    kmPrice: responseJson.unit_price,
+                    monthPrice: responseJson.month_price,
+                    yearPrice: responseJson.year_price,
+                })
+            })
     }
 
 
     render() {     
         return (
             <View style={globalStyles.container}>   
-                <Text style={globalStyles.messageBox}>{ this.state.message }</Text>
                 <View style={globalStyles.inputForm}>
-                    <InputDate submitDateHandler={this.submitDateHandler} /> 
+                    <InputDate submitDateHandler={this.submitDateHandler} currentDate={this.state.date}/> 
                     <View style={globalStyles.pickerBox}>
                         <Picker
                             selectedValue = { this.state.car } 
@@ -106,11 +132,13 @@ export default class Home extends React.Component {
                         placeholder='Prise...'
                         style={globalStyles.input}
                         onChangeText={(text) => this.setState({price: text})}
+                        ref={input => {this.priceInput = input}}
                     />
                     <TextInput 
                         placeholder='Amount...'
                         style={globalStyles.input}
                         onChangeText={(text) => this.setState({mount: text})}
+                        ref={input => {this.amountInput = input}}
                     />
                     <Button 
                         title='Add'

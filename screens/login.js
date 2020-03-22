@@ -13,16 +13,14 @@ export default class Login extends React.Component {
             login: '',
             password: '',
             rememberMe: false,
-            savedAuth: false,
         }
-    }
-
-    componentDidMount() {
-        this.checkSavedAuth()
     }
          
     async signIn() {
-        if (this.state.rememberMe) {this.saveAuth()}        
+        if (this.state.rememberMe) {
+            AsyncStorage.setItem('login', this.state.login)
+            AsyncStorage.setItem('password', this.state.password)
+        }        
         try {
             let auth = 'Basic ' + base64.encode(this.state.login + ':' + this.state.password)
             let url = API_URL + 'tokens'
@@ -32,36 +30,27 @@ export default class Login extends React.Component {
                     Authorization: auth
                 }
             })
-            let responseJson = await response.json()
-            if (responseJson.token) {
-                AsyncStorage.setItem('userToken', responseJson.token)
-                this.props.navigation.push('Home')
+            if (response.ok) {
+                let responseJson = await response.json()
+                let tokenAuth = 'Bearer ' + responseJson.token
+                let startDataUrl = API_URL + 'spends/move/car/start'
+                let startDataResponse = await fetch(startDataUrl, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: tokenAuth
+                    }
+                })
+                if (startDataResponse.ok) {
+                    let startDataResponseJson = await startDataResponse.json()
+                    startDataResponseJson.tokenAuth = tokenAuth
+                    global.startData = startDataResponseJson
+                    this.props.navigation.navigate('Home')
+                }    
             } else {
                 Alert.alert('SignIn', 'Authorization error')
             }
         } catch(error) {
             Alert.alert('SignIn', 'Authorization error')
-        }
-    }
-
-    saveAuth = () => {
-        AsyncStorage.setItem('login', this.state.login)
-        AsyncStorage.setItem('password', this.state.password)
-    }
-
-    checkSavedAuth = async () => {
-        try {
-            let login = await AsyncStorage.getItem('login')
-            let password = await AsyncStorage.getItem('password')
-            if (login && password) {
-                this.setState({rememberMe: true})
-                this.setState({savedAuth: true})
-                this.setState({login: login})
-                this.setState({password: password})
-            }
-
-        } catch(error){
-            console.log(error)
         }
     }
 
