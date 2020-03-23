@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        backgroundColor: 'white'
     },
     item: {
         flexDirection:'row', 
@@ -58,17 +58,48 @@ export const globalStyles = StyleSheet.create({
     },
     leftBar: {
         flex: 1, 
-        borderColor: 'black', 
-        borderWidth: 1, 
+        backgroundColor: 'white', 
         marginRight: 10, 
         padding: 10, 
         alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            height: 2,
+            width: 0
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
     },
     rightBar: {
         flex: 1, 
-        borderColor: 'black', 
-        borderWidth: 1, 
+        backgroundColor: 'white',
         padding: 10, 
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            height: 2,
+            width: 0
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    homeInputForm: {
+        flex: 1,
+        backgroundColor: 'white',
+        padding: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+            height: 2,
+            width: 0
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 7
+    },
+    autoScrollView: {
+        backgroundColor: 'whitesmoke',
+        padding: 20
     }
 })

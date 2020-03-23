@@ -97,7 +97,29 @@ export default class Home extends React.Component {
     render() {     
         return (
             <View style={globalStyles.container}>   
-                <View style={globalStyles.inputForm}>
+                <View style={globalStyles.autoScrollView}>
+                    <View style={globalStyles.item}>
+                        <View style={globalStyles.leftBar}>
+                            <Text style={{fontSize: 40}}>{this.state.fuelConsumption}</Text>
+                            <Text style={{fontSize: 24}}>L/100km</Text>
+                        </View>
+                        <View style={globalStyles.rightBar}>
+                            <Text style={{fontSize: 40}}>{this.state.kmPrice}</Text>
+                            <Text style={{fontSize: 24}}>RUB/km</Text>
+                        </View>
+                    </View>
+                    <View style={globalStyles.item}>
+                        <View style={globalStyles.leftBar}>
+                            <Text style={{fontSize: 40}}>{this.state.monthPrice}</Text>
+                            <Text style={{fontSize: 24}}>RUB/M</Text>
+                        </View>
+                        <View style={globalStyles.rightBar}>
+                            <Text style={{fontSize: 40}}>{this.state.yearPrice}</Text>
+                            <Text style={{fontSize: 24}}>RUB/Y</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={globalStyles.homeInputForm}>
                     <InputDate submitDateHandler={this.submitDateHandler} currentDate={this.state.date}/> 
                     <View style={globalStyles.pickerBox}>
                         <Picker
@@ -145,28 +167,6 @@ export default class Home extends React.Component {
                         onPress={this.submitSpendHandler}
                         style={globalStyles.button}
                     />
-                </View>
-                <View>
-                    <View style={globalStyles.item}>
-                        <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 40}}>{this.state.fuelConsumption}</Text>
-                            <Text style={{fontSize: 24}}>L/100km</Text>
-                        </View>
-                        <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 40}}>{this.state.kmPrice}</Text>
-                            <Text style={{fontSize: 24}}>RUB/km</Text>
-                        </View>
-                    </View>
-                    <View style={globalStyles.item}>
-                        <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 40}}>{this.state.monthPrice}</Text>
-                            <Text style={{fontSize: 24}}>RUB/M</Text>
-                        </View>
-                        <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 40}}>{this.state.yearPrice}</Text>
-                            <Text style={{fontSize: 24}}>RUB/Y</Text>
-                        </View>
-                    </View>
                 </View>
             </View>
         )
