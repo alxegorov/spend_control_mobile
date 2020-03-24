@@ -25,22 +25,22 @@ export default class Home extends React.Component {
             appState: AppState.currentState,
             flatListData: [
                 {
-                    id: 1,
+                    id: '1',
                     title: global.startData.fuel_consumption,
                     text: 'L/100km'
                 },
                 {
-                    id: 2,
+                    id: '2',
                     title: global.startData.unit_price,
                     text: 'RUB/km'
                 },
                 {
-                    id: 3,
+                    id: '3',
                     title: global.startData.month_price,
                     text: 'RUB/M'
                 },
                 {
-                    id: 4,
+                    id: '4',
                     title: global.startData.year_price,
                     text: 'RUB/Y'
                 }

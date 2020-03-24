@@ -16,6 +16,10 @@ export default class Login extends React.Component {
         }
     }
          
+    componentDidMount() {
+        this.checkSavedAuth()
+    }
+    
     async signIn() {
         if (this.state.rememberMe) {
             AsyncStorage.setItem('login', this.state.login)
@@ -51,6 +55,21 @@ export default class Login extends React.Component {
             }
         } catch(error) {
             Alert.alert('SignIn', 'Authorization error')
+        }
+    }
+
+    async checkSavedAuth() {
+        try {
+            let login = await AsyncStorage.getItem('login')
+            let password = await AsyncStorage.getItem('password')
+            if (login && password) {
+                this.setState({rememberMe: true})
+                this.setState({login: login})
+                this.setState({password: password})
+            }
+
+        } catch(error){
+            console.log(error)
         }
     }
 
