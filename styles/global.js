@@ -58,24 +58,13 @@ export const globalStyles = StyleSheet.create({
     },
     leftBar: {
         flex: 1, 
+        height: 200,
+        width: 200,
         backgroundColor: 'white', 
-        marginRight: 10, 
+        marginRight: 20, 
         padding: 10, 
         alignItems: 'center',
-        shadowColor: "#000",
-        shadowOffset: {
-            height: 2,
-            width: 0
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5
-    },
-    rightBar: {
-        flex: 1, 
-        backgroundColor: 'white',
-        padding: 10, 
-        alignItems: 'center',
+        justifyContent: 'center',
         shadowColor: "#000",
         shadowOffset: {
             height: 2,
@@ -100,6 +89,7 @@ export const globalStyles = StyleSheet.create({
     },
     autoScrollView: {
         backgroundColor: 'whitesmoke',
-        padding: 20
+        padding: 20,
+        height: 240
     }
 })

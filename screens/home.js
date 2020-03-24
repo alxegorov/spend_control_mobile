@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, Button, Text, Picker, AppState, Alert } from "react-native";
+import { View, TextInput, Button, Text, Picker, AppState, Alert, SafeAreaView, FlatList } from "react-native";
 import { globalStyles } from "../styles/global";
 import InputDate from '../components/inputDate';
 import { API_URL } from '../config'
@@ -23,6 +23,28 @@ export default class Home extends React.Component {
             monthPrice: global.startData.month_price,
             yearPrice: global.startData.year_price,
             appState: AppState.currentState,
+            flatListData: [
+                {
+                    id: 1,
+                    title: global.startData.fuel_consumption,
+                    text: 'L/100km'
+                },
+                {
+                    id: 2,
+                    title: global.startData.unit_price,
+                    text: 'RUB/km'
+                },
+                {
+                    id: 3,
+                    title: global.startData.month_price,
+                    text: 'RUB/M'
+                },
+                {
+                    id: 4,
+                    title: global.startData.year_price,
+                    text: 'RUB/Y'
+                }
+            ]
         }
     }
 
@@ -96,29 +118,19 @@ export default class Home extends React.Component {
 
     render() {     
         return (
-            <View style={globalStyles.container}>   
+            <SafeAreaView style={globalStyles.container}> 
                 <View style={globalStyles.autoScrollView}>
-                    <View style={globalStyles.item}>
-                        <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 40}}>{this.state.fuelConsumption}</Text>
-                            <Text style={{fontSize: 24}}>L/100km</Text>
-                        </View>
-                        <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 40}}>{this.state.kmPrice}</Text>
-                            <Text style={{fontSize: 24}}>RUB/km</Text>
-                        </View>
-                    </View>
-                    <View style={globalStyles.item}>
-                        <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 40}}>{this.state.monthPrice}</Text>
-                            <Text style={{fontSize: 24}}>RUB/M</Text>
-                        </View>
-                        <View style={globalStyles.rightBar}>
-                            <Text style={{fontSize: 40}}>{this.state.yearPrice}</Text>
-                            <Text style={{fontSize: 24}}>RUB/Y</Text>
-                        </View>
-                    </View>
-                </View>
+                    <FlatList 
+                        horizontal = {true}
+                        data = {this.state.flatListData}
+                        renderItem = {({ item }) => (
+                            <View style={globalStyles.leftBar}>
+                                <Text style={{fontSize: 40}}>{item.title}</Text>
+                                <Text style={{fontSize: 24}}>{item.text}</Text>
+                            </View>)}
+                        keyExtractor = {item => item.id}
+                    /> 
+                </View> 
                 <View style={globalStyles.homeInputForm}>
                     <InputDate submitDateHandler={this.submitDateHandler} currentDate={this.state.date}/> 
                     <View style={globalStyles.pickerBox}>
@@ -168,7 +180,7 @@ export default class Home extends React.Component {
                         style={globalStyles.button}
                     />
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 }
