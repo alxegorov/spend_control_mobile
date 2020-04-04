@@ -1,95 +1,70 @@
-import React from "react";
-import { View, TextInput, Button, Alert, AsyncStorage, Switch, Text } from "react-native";
-import { globalStyles } from "../styles/global";
-import base64 from 'react-native-base64';
+import React from 'react'
+import { View, TextInput, Button, Text, Switch, AsyncStorage } from 'react-native'
+import { globalStyles } from '../styles/global'
+import base64 from 'react-native-base64'
 import { API_URL } from '../config'
 
 
-
 export default class Login extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state={
             login: '',
             password: '',
-            rememberMe: false,
+            rememberMe: false
         }
     }
-         
-    componentDidMount() {
-        this.checkSavedAuth()
-    }
-    
-    async signIn() {
+
+    signInButtonHandler() {
         if (this.state.rememberMe) {
-            AsyncStorage.setItem('login', this.state.login)
-            AsyncStorage.setItem('password', this.state.password)
-        }        
+            AsyncStorage.multiSet([['login', this.state.login], 
+                                   ['password', this.state.password]])
+        }
         try {
-            let auth = 'Basic ' + base64.encode(this.state.login + ':' + this.state.password)
-            let url = API_URL + 'tokens'
-            let response = await fetch(url, {
+            let basicAuth = 'Basic ' + base64.encode(this.state.login + ':' + this.state.password)
+            let tokenUrl = API_URL + 'tokens'
+            fetch(tokenUrl, {
                 method: 'POST',
-                headers: {
-                    Authorization: auth
+                headers: {Authorization: basicAuth}
+            }).then(
+                (response) => response.json()
+            ).then(
+                (json) => {
+                    let tokenAuth = 'Bearer ' + json.token
+                    let startDataUrl = API_URL + 'spends/move/car/start'
+                    fetch(startDataUrl, {
+                        method: 'GET',
+                        headers: {Authorization: tokenAuth}
+                    }).then(
+                        (response) => response.json()
+                    ).then(
+                        (json) => {
+                            json.tokenAuth = tokenAuth
+                            this.props.navigation.navigate('Home', {startData: json})
+                        }
+                    )
                 }
-            })
-            if (response.ok) {
-                let responseJson = await response.json()
-                let tokenAuth = 'Bearer ' + responseJson.token
-                let startDataUrl = API_URL + 'spends/move/car/start'
-                let startDataResponse = await fetch(startDataUrl, {
-                    method: 'GET',
-                    headers: {
-                        Authorization: tokenAuth
-                    }
-                })
-                if (startDataResponse.ok) {
-                    let startDataResponseJson = await startDataResponse.json()
-                    startDataResponseJson.tokenAuth = tokenAuth
-                    global.startData = startDataResponseJson
-                    this.props.navigation.navigate('Home')
-                }    
-            } else {
-                Alert.alert('SignIn', 'Authorization error')
-            }
-        } catch(error) {
+            )
+        } catch {
             Alert.alert('SignIn', 'Authorization error')
         }
     }
-
-    async checkSavedAuth() {
-        try {
-            let login = await AsyncStorage.getItem('login')
-            let password = await AsyncStorage.getItem('password')
-            if (login && password) {
-                this.setState({rememberMe: true})
-                this.setState({login: login})
-                this.setState({password: password})
-            }
-
-        } catch(error){
-            console.log(error)
-        }
-    }
-
+    
     render() {
         return (
             <View style={globalStyles.container}>
                 <View style={globalStyles.inputForm}>
                     <TextInput 
-                        style={globalStyles.input}
-                        placeholder='Username...'
+                        style={globalStyles.input} 
+                        placeholder='Username'
                         autoFocus={true}
-                        onChangeText={(value) => this.setState({login: value})}
-                        value={this.state.login}
+                        onChangeText={(text) => this.setState({login: text})}
                     />
                     <TextInput 
-                        style={globalStyles.input}
-                        placeholder='Password...'
+                        style={globalStyles.input} 
+                        placeholder='Password'
                         secureTextEntry={true}
-                        onChangeText={(value) => this.setState({password: value})}
-                        value={this.state.password}
+                        onChangeText={(text) => this.setState({password: text})}
                     />
                     <View style={globalStyles.item}>
                         <Text style={{marginRight: 10}}>Remember Me</Text>
@@ -99,10 +74,8 @@ export default class Login extends React.Component {
                         />     
                     </View>
                     <Button 
-                        style={globalStyles.loginButton}
-                        title='Sign In'
-                        onPress={ this.signIn }
-                    /> 
+                        title='Sign in' onPress={() => this.signInButtonHandler()}
+                    />
                 </View>
             </View>
         )

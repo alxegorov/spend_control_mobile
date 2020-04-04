@@ -1,47 +1,43 @@
 import React from "react";
-import { View, TextInput, Button, Text, Picker, AppState, Alert, SafeAreaView, FlatList } from "react-native";
+import { View, TextInput, Button, Text, Picker, AppState, Alert, SafeAreaView, FlatList, AsyncStorage } from "react-native";
 import { globalStyles } from "../styles/global";
 import InputDate from '../components/inputDate';
 import { API_URL } from '../config'
 
 
 export default class Home extends React.Component {
-    
-    constructor(props){
-        super(props)
+    constructor(route, props){
+        super(route, props)
+        console.log(route.route.params)
         this.state={
             date: new Date(),
-            cars: global.startData.cars_list,
+            cars: route.route.params.startData.cars_list,
             car: '1',
-            types: global.startData.spend_types,
+            types: route.route.params.startData.spend_types,
             spendType: '1',
             trip: '',
             price: '',
             mount: '',
-            fuelConsumption: global.startData.fuel_consumption,
-            kmPrice: global.startData.unit_price,
-            monthPrice: global.startData.month_price,
-            yearPrice: global.startData.year_price,
             appState: AppState.currentState,
             flatListData: [
                 {
                     id: '1',
-                    title: global.startData.fuel_consumption,
+                    title: route.route.params.startData.fuel_consumption,
                     text: 'L/100km'
                 },
                 {
                     id: '2',
-                    title: global.startData.unit_price,
+                    title: route.route.params.startData.unit_price,
                     text: 'RUB/km'
                 },
                 {
                     id: '3',
-                    title: global.startData.month_price,
+                    title: route.route.params.startData.month_price,
                     text: 'RUB/M'
                 },
                 {
                     id: '4',
-                    title: global.startData.year_price,
+                    title: route.route.params.startData.year_price,
                     text: 'RUB/Y'
                 }
             ]
@@ -129,6 +125,7 @@ export default class Home extends React.Component {
                                 <Text style={{fontSize: 24}}>{item.text}</Text>
                             </View>)}
                         keyExtractor = {item => item.id}
+                        showsHorizontalScrollIndicator={false}
                     /> 
                 </View> 
                 <View style={globalStyles.homeInputForm}>
