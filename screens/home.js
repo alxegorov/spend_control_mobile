@@ -1,14 +1,14 @@
 import React from "react";
 import { View, TextInput, Button, Text, Picker, AppState, Alert, SafeAreaView, FlatList, AsyncStorage } from "react-native";
-import { globalStyles } from "../styles/global";
-import InputDate from '../components/inputDate';
+import { globalStyles } from "../styles/global"
+import InputDate from '../components/inputDate'
+import SpendsScrollList from '../components/spendsScrollList'
 import { API_URL } from '../config'
 
 
 export default class Home extends React.Component {
     constructor(route, props){
         super(route, props)
-        console.log(route.route.params)
         this.state={
             date: new Date(),
             cars: route.route.params.startData.cars_list,
@@ -19,28 +19,11 @@ export default class Home extends React.Component {
             price: '',
             mount: '',
             appState: AppState.currentState,
-            flatListData: [
-                {
-                    id: '1',
-                    title: route.route.params.startData.fuel_consumption,
-                    text: 'L/100km'
-                },
-                {
-                    id: '2',
-                    title: route.route.params.startData.unit_price,
-                    text: 'RUB/km'
-                },
-                {
-                    id: '3',
-                    title: route.route.params.startData.month_price,
-                    text: 'RUB/M'
-                },
-                {
-                    id: '4',
-                    title: route.route.params.startData.year_price,
-                    text: 'RUB/Y'
-                }
-            ]
+            fuel_consumption: route.route.params.startData.fuel_consumption,
+            unit_price: route.route.params.startData.unit_price,
+            month_price: route.route.params.startData.month_price,
+            year_price: route.route.params.startData.year_price,
+            tokenAuth: route.route.params.startData.tokenAuth
         }
     }
 
@@ -54,7 +37,6 @@ export default class Home extends React.Component {
 
     _handleAppStateChange = (nextAppState) => {
         if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-            this.updateData()
         }
         this.setState({appState: nextAppState})
     }
@@ -70,14 +52,13 @@ export default class Home extends React.Component {
         fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: global.startData.tokenAuth,
+                Authorization: this.state.tokenAuth,
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
             body: dataJson
         }).then((response) => {
             if (response.ok) {
-                this.updateData()
                 this.priceInput.clear()
                 this.amountInput.clear()
                 Alert.alert('Spend Control', 'Spend successful added')
@@ -88,48 +69,20 @@ export default class Home extends React.Component {
         
     }
 
-    updateData() {
-        let url = API_URL + 'spends/move/car/start'
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                Authorization: global.startData.tokenAuth
-            }
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                responseJson.tokenAuth = global.startData.tokenAuth
-                global.startData = responseJson
-                this.setState({
-                    cars: responseJson.cars_list,
-                    types: responseJson.spend_types,
-                    fuelConsumption: responseJson.fuel_consumption,
-                    kmPrice: responseJson.unit_price,
-                    monthPrice: responseJson.month_price,
-                    yearPrice: responseJson.year_price,
-                })
-            })
-    }
-
-
     render() {     
         return (
             <SafeAreaView style={globalStyles.container}> 
-                <View style={globalStyles.autoScrollView}>
-                    <FlatList 
-                        horizontal = {true}
-                        data = {this.state.flatListData}
-                        renderItem = {({ item }) => (
-                            <View style={globalStyles.leftBar}>
-                                <Text style={{fontSize: 40}}>{item.title}</Text>
-                                <Text style={{fontSize: 24}}>{item.text}</Text>
-                            </View>)}
-                        keyExtractor = {item => item.id}
-                        showsHorizontalScrollIndicator={false}
-                    /> 
-                </View> 
+                <SpendsScrollList 
+                    fuel_consumption={this.state.fuel_consumption}
+                    unit_price={this.state.unit_price}
+                    month_price={this.state.month_price}
+                    year_price ={this.state.year_price}
+                />
                 <View style={globalStyles.homeInputForm}>
-                    <InputDate submitDateHandler={this.submitDateHandler} currentDate={this.state.date}/> 
+                    <InputDate 
+                        submitDateHandler={this.submitDateHandler} 
+                        currentDate={this.state.date}
+                    /> 
                     <View style={globalStyles.pickerBox}>
                         <Picker
                             selectedValue = { this.state.car } 
