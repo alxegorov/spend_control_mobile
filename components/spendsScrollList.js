@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, FlatList, Text, Button } from 'react-native'
+import { View, FlatList, Text } from 'react-native'
 import { globalStyles } from "../styles/global"
+import NumberFormat from 'react-number-format'
 
 
 export default class SpendsScrollList extends React.Component {
@@ -59,7 +60,12 @@ export default class SpendsScrollList extends React.Component {
                     data={this.state.flatListData}
                     renderItem={({ item }) => (
                         <View style={globalStyles.leftBar}>
-                            <Text style={{fontSize: 40}}>{item.title}</Text>
+                            <NumberFormat 
+                                value={item.title} 
+                                displayType={'text'} 
+                                thousandSeparator={true} 
+                                renderText={value => <Text style={{fontSize: 40}}>{value}</Text>}
+                            />
                             <Text style={{fontSize: 24}}>{item.text}</Text>
                         </View>)}
                     keyExtractor = {item => item.id}
