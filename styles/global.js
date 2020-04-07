@@ -59,8 +59,8 @@ export const globalStyles = StyleSheet.create({
     },
     leftBar: {
         flex: 1, 
-        height: 190,
-        width: 190,
+        height: 180,
+        width: 180,
         backgroundColor: 'white', 
         marginRight: 20, 
         padding: 10, 
@@ -91,6 +91,6 @@ export const globalStyles = StyleSheet.create({
     autoScrollView: {
         backgroundColor: 'whitesmoke',
         padding: 20,
-        height: 230
+        height: 220
     }
 })
