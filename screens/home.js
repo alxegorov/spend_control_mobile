@@ -76,7 +76,8 @@ export default class Home extends React.Component {
                     fuel_consumption={this.state.fuel_consumption}
                     unit_price={this.state.unit_price}
                     month_price={this.state.month_price}
-                    year_price ={this.state.year_price}
+                    year_price={this.state.year_price}
+                    tokenAuth={this.state.tokenAuth}
                 />
                 <View style={globalStyles.homeInputForm}>
                     <InputDate 

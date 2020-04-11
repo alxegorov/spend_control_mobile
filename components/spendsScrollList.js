@@ -3,6 +3,7 @@ import { View, FlatList, Text } from 'react-native'
 import { globalStyles } from "../styles/global"
 import NumberFormat from 'react-number-format'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { API_URL } from '../config'
 
 
 export default class SpendsScrollList extends React.Component {
@@ -20,7 +21,7 @@ export default class SpendsScrollList extends React.Component {
                     id: '1',
                     title: data.unit_price,
                     text: 'RUB/km',
-                    icon: 'road'
+                    icon: 'road-variant'
                 },
                 {
                     id: '2',
@@ -44,6 +45,45 @@ export default class SpendsScrollList extends React.Component {
         setInterval(() => this.scroll(), 3000)
     }
 
+    componentDidUpdate(data) {
+        let dataUrl = API_URL + 'spends/move/car/start'
+        fetch(dataUrl, {
+            method: 'GET',
+            headers:{Authorization: data.tokenAuth}
+        }).then(
+            (response) => response.json()
+        ).then(
+            (json) => {
+                this.setState({flatListData: [
+                    {
+                        id: '0',
+                        title: json.fuel_consumption,
+                        text: 'L/100km',
+                        icon: 'fuel'
+                    },
+                    {
+                        id: '1',
+                        title: json.unit_price,
+                        text: 'RUB/km',
+                        icon: 'road-variant'
+                    },
+                    {
+                        id: '2',
+                        title: json.month_price,
+                        text: 'RUB/M',
+                        icon: 'calendar'
+                    },
+                    {
+                        id: '3',
+                        title: json.year_price,
+                        text: 'RUB/Y',
+                        icon: 'calendar-multiple'
+                    }
+                ]})
+            }
+        )
+    }
+
     scroll() {
         try{
             if (this.state.init) {
@@ -63,6 +103,7 @@ export default class SpendsScrollList extends React.Component {
                 <FlatList 
                     horizontal={true}
                     data={this.state.flatListData}
+                    extraData={this.state.flatListData}
                     renderItem={({ item }) => (
                         <View style={globalStyles.leftBar}>
                             <NumberFormat 
@@ -72,7 +113,7 @@ export default class SpendsScrollList extends React.Component {
                                 renderText={value => <Text style={{fontSize: 40}}>{value}</Text>}
                             />
                             <Text style={{fontSize: 24}}>{item.text}</Text>
-                            <MaterialCommunityIcons name={item.icon} size={32} color='black' />
+                            <MaterialCommunityIcons name={item.icon} size={64} color='black' />
                         </View>)}
                     keyExtractor = {item => item.id}
                     showsHorizontalScrollIndicator={false}
