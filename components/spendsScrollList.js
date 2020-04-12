@@ -7,6 +7,8 @@ import { API_URL } from '../config'
 
 
 export default class SpendsScrollList extends React.Component {
+    _isMounted = false
+
     constructor(data, params) {
         super(data, params)
         this.state={
@@ -42,6 +44,7 @@ export default class SpendsScrollList extends React.Component {
     }
 
     componentDidMount() {
+        this._isMounted = true
         setInterval(() => this.scroll(), 3000)
     }
 
@@ -83,6 +86,8 @@ export default class SpendsScrollList extends React.Component {
             }
         )
     }
+
+    componentWillUnmount() {this._isMounted = false}
 
     scroll() {
         try{

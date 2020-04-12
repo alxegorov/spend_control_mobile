@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, Button, Text, Picker, AppState, Alert, SafeAreaView, FlatList, AsyncStorage } from "react-native";
+import { View, TextInput, Button, Picker, AppState, Alert, SafeAreaView } from "react-native";
 import { globalStyles } from "../styles/global"
 import InputDate from '../components/inputDate'
 import SpendsScrollList from '../components/spendsScrollList'
@@ -13,6 +13,7 @@ export default class Home extends React.Component {
             date: new Date(),
             cars: route.route.params.startData.cars_list,
             car: '1',
+            oneCar: false,
             types: route.route.params.startData.spend_types,
             spendType: '1',
             trip: '',
@@ -25,6 +26,10 @@ export default class Home extends React.Component {
             year_price: route.route.params.startData.year_price,
             tokenAuth: route.route.params.startData.tokenAuth
         }
+        if (this.state.cars.length==1) { 
+            this.state.oneCar = true
+        }
+        this.state.car = this.state.cars[0].id
     }
 
     componentDidMount() {
@@ -84,6 +89,7 @@ export default class Home extends React.Component {
                         submitDateHandler={this.submitDateHandler} 
                         currentDate={this.state.date}
                     /> 
+                    {!this.state.oneCar?(
                     <View style={globalStyles.pickerBox}>
                         <Picker
                             selectedValue = { this.state.car } 
@@ -95,7 +101,7 @@ export default class Home extends React.Component {
                                 )
                             })}
                         </Picker>
-                    </View>
+                    </View>):null}
                     <View style={globalStyles.pickerBox}>
                         <Picker
                             selectedValue = { this.state.spendType } 

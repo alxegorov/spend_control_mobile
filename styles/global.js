@@ -11,51 +11,34 @@ export const globalStyles = StyleSheet.create({
         alignItems: "center"
     },
     pickerBox: {
-        borderWidth: 1, 
-        borderColor: 'grey', 
-        borderRadius: 10, 
         marginBottom: 10, 
-        backgroundColor: 'white'
+        backgroundColor: 'whitesmoke'
     },
     inputForm: {
         padding: 20,
         marginBottom: 10
     },   
     input: {
-        borderWidth: 1,
-        borderColor: 'grey',
         height: 40,
         marginBottom: 10,
         padding: 8,
-        backgroundColor: 'white',
-        borderRadius: 10
+        backgroundColor: 'whitesmoke'
     },
     inputWithButton: {
-        borderLeftWidth : 1,
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderColor: 'grey',
         height: 40,
         marginBottom: 10,
         padding: 8,
-        backgroundColor: 'white'
+        backgroundColor: 'whitesmoke'
     },
     button: {
         marginBottom: 10
     },
     buttonForInput: {
-        backgroundColor: 'white', 
+        backgroundColor: 'whitesmoke', 
         height: 40, 
         justifyContent: 'center', 
         alignItems: 'center', 
-        borderBottomWidth: 1, 
-        borderTopWidth: 1, 
-        borderRightWidth: 1, 
-        borderColor: 'grey', 
-        borderTopRightRadius: 10, 
-        borderBottomRightRadius: 10
+        
     },
     leftBar: {
         flex: 1, 
