@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, Button, Picker, AppState, Alert, SafeAreaView } from "react-native";
+import { View, TextInput, Button, Picker, Alert, SafeAreaView, Keyboard } from "react-native";
 import { globalStyles } from "../styles/global"
 import InputDate from '../components/inputDate'
 import SpendsScrollList from '../components/spendsScrollList'
@@ -19,13 +19,15 @@ export default class Home extends React.Component {
             trip: '',
             price: '',
             mount: '',
-            appState: AppState.currentState,
             fuel_consumption: route.route.params.startData.fuel_consumption,
             unit_price: route.route.params.startData.unit_price,
             month_price: route.route.params.startData.month_price,
             year_price: route.route.params.startData.year_price,
-            tokenAuth: route.route.params.startData.tokenAuth
+            tokenAuth: route.route.params.startData.tokenAuth,
+            keyboardShow: false
         }
+        this._keyboardDidShow = this._keyboardDidShow.bind(this)
+        this._keyboardDidHide = this._keyboardDidHide.bind(this)
         if (this.state.cars.length==1) { 
             this.state.oneCar = true
         }
@@ -33,17 +35,27 @@ export default class Home extends React.Component {
     }
 
     componentDidMount() {
-        AppState.addEventListener('change', this._handleAppStateChange)
-    }
-
+        this.keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            this._keyboardDidShow,
+        );
+        this.keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            this._keyboardDidHide,
+        );
+      }
+    
     componentWillUnmount() {
-        AppState.removeEventListener('change', this._handleAppStateChange)
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
     }
-
-    _handleAppStateChange = (nextAppState) => {
-        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-        }
-        this.setState({appState: nextAppState})
+    
+    _keyboardDidShow() {
+        this.setState({keyboardShow: true})
+    }
+    
+    _keyboardDidHide() {
+        this.setState({keyboardShow: false})
     }
 
     submitDateHandler = (text) => {
@@ -76,14 +88,16 @@ export default class Home extends React.Component {
 
     render() {     
         return (
-            <SafeAreaView style={globalStyles.container}> 
+            <SafeAreaView style={globalStyles.container}>
+                {!this.state.keyboardShow?( 
                 <SpendsScrollList 
                     fuel_consumption={this.state.fuel_consumption}
                     unit_price={this.state.unit_price}
                     month_price={this.state.month_price}
                     year_price={this.state.year_price}
                     tokenAuth={this.state.tokenAuth}
-                />
+                />):(
+                <View></View>)}
                 <View style={globalStyles.homeInputForm}>
                     <InputDate 
                         submitDateHandler={this.submitDateHandler} 
