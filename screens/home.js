@@ -96,8 +96,7 @@ export default class Home extends React.Component {
                     month_price={this.state.month_price}
                     year_price={this.state.year_price}
                     tokenAuth={this.state.tokenAuth}
-                />):(
-                <View></View>)}
+                />):(null)}
                 <View style={globalStyles.homeInputForm}>
                     <InputDate 
                         submitDateHandler={this.submitDateHandler} 
