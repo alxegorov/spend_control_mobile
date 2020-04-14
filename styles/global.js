@@ -38,7 +38,7 @@ export const globalStyles = StyleSheet.create({
         height: 40, 
         justifyContent: 'center', 
         alignItems: 'center', 
-        
+        flex: 1        
     },
     leftBar: {
         flex: 1, 

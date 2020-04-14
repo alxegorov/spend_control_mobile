@@ -10,7 +10,6 @@ export default class Home extends React.Component {
     constructor(route, props){
         super(route, props)
         this.state={
-            date: new Date(),
             cars: route.route.params.startData.cars_list,
             car: '1',
             oneCar: false,
@@ -100,7 +99,6 @@ export default class Home extends React.Component {
                 <View style={globalStyles.homeInputForm}>
                     <InputDate 
                         submitDateHandler={this.submitDateHandler} 
-                        currentDate={this.state.date}
                     /> 
                     {!this.state.oneCar?(
                     <View style={globalStyles.pickerBox}>
