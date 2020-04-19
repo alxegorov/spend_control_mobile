@@ -20,14 +20,13 @@ export default class App extends React.Component {
       isAuthorized: false,
       startData: {}
     }
-    this.getStartFetch = this.getStartFetch.bind(this)
   }
 
   render() {
     if (!this.state.isReady) {
       return (
         <AppLoading 
-          startAsync = {this.getStartFetch}
+          startAsync = {this._getStartFetch}
           onFinish = {() => this.setState({isReady: true})}
           onError ={console.warn}
         />
@@ -59,7 +58,7 @@ export default class App extends React.Component {
     )
   }
 
-  async getStartFetch() {
+  async _getStartFetch() {
     try {
       let login = await AsyncStorage.getItem('login')
       let password = await AsyncStorage.getItem('password')

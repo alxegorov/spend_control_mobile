@@ -10,6 +10,7 @@ export default class Home extends React.Component {
     constructor(route, props){
         super(route, props)
         this.state={
+            date: new Date(),
             cars: route.route.params.startData.cars_list,
             car: '1',
             oneCar: false,
@@ -62,7 +63,11 @@ export default class Home extends React.Component {
     }
 
     submitSpendHandler = () => {
+        if (!/^\+?(0|[1-9]\d*)$/.test(this.state.trip)) {
+            return Alert.alert('Spend Control', 'Error trip value')
+        }
         let data = {"date":this.state.date,"car":this.state.car,"type":this.state.spendType,"trip":this.state.trip,"price":this.state.price,"mount":this.state.mount}
+        console.log(data)
         let dataJson = JSON.stringify(data)
         let url = API_URL + 'spends/move/car/newspend'
         fetch(url, {
@@ -129,18 +134,21 @@ export default class Home extends React.Component {
                         placeholder='Trip...'
                         style={globalStyles.input}
                         onChangeText={(text) => this.setState({trip: text})}
+                        keyboardType='decimal-pad'
                     />
                     <TextInput 
                         placeholder='Prise...'
                         style={globalStyles.input}
                         onChangeText={(text) => this.setState({price: text})}
                         ref={input => {this.priceInput = input}}
+                        keyboardType='decimal-pad'
                     />
                     <TextInput 
                         placeholder='Amount...'
                         style={globalStyles.input}
                         onChangeText={(text) => this.setState({mount: text})}
                         ref={input => {this.amountInput = input}}
+                        keyboardType='decimal-pad'
                     />
                     <Button 
                         title='Add'
